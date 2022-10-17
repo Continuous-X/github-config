@@ -1,11 +1,11 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2020 NAME HERE <EMAIL ADDRESS>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,18 +16,18 @@ limitations under the License.
 package cmd
 
 import (
+	error2 "github-config/pkg/error"
+	"github-config/pkg/versions"
+	"encoding/json"
 	"fmt"
-	"github-config/pkg/github"
-	"github-config/pkg/output"
-
 	"github.com/spf13/cobra"
+	"k8s.io/apimachinery/pkg/version"
+	"runtime"
 )
 
-var gh_personal_token string
-
-// exportCmd represents the export command
-var exportCmd = &cobra.Command{
-	Use:   "export",
+// versionCmd represents the versions command
+var versionCmd = &cobra.Command{
+	Use:   "version",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -36,27 +36,39 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("export called")
-		ghp_flag, _ := cmd.Flags().GetString("ghp")
-		output.PrintCliInfo(fmt.Sprintf("ghp flag - '%s'", ghp_flag))
-
-		github.GHOrganization{Organisation: "Continuous-X", GhToken: ghp_flag}.GetConfig()
-
+		versionInfo := getVersionInfo()
+		marshalledVersionInfo, err := json.Marshal(versionInfo)
+		if err != nil {
+			error2.FailHandleCommand(err)
+		}
+		fmt.Println(string(marshalledVersionInfo))
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(exportCmd)
+	rootCmd.AddCommand(versionCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// exportCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// versionCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// exportCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	exportCmd.Flags().StringVarP(&gh_personal_token, "ghp", "g", "", "github personal token ")
-	exportCmd.MarkFlagRequired("ghp")
+	// versionCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func getVersionInfo() *version.Info {
+	return &version.Info{
+		Major:        versions.MajorFromGit,
+		Minor:        versions.MinorFromGit,
+		GitCommit:    versions.CommitFromGit,
+		GitVersion:   versions.VersionFromGit,
+		GitTreeState: versions.GitTreeState,
+		BuildDate:    versions.BuildDate,
+		GoVersion:    runtime.Version(),
+		Compiler:     runtime.Compiler,
+		Platform:     fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+	}
 }
