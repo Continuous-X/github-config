@@ -23,7 +23,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var gh_personal_token string
+var (
+	gh_personal_token string
+	gh_organization   string
+)
 
 // exportCmd represents the export command
 var exportCmd = &cobra.Command{
@@ -37,10 +40,13 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("export called")
-		ghp_flag, _ := cmd.Flags().GetString("ghp")
-		output.PrintCliInfo(fmt.Sprintf("ghp flag - '%s'", ghp_flag))
+		gh_p_flag, _ := cmd.Flags().GetString(flag_gh_token)
+		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_token,gh_p_flag))
 
-		github.GHOrganization{Organisation: "Continuous-X", GhToken: ghp_flag}.GetConfig()
+		gh_o_flag, _ := cmd.Flags().GetString(flag_gh_orga)
+		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_o_flag))
+
+		fmt.Println(github.GHOrganization{Organisation: "Continuous-X", GhToken: gh_p_flag}.GetConfig(gh_o_flag))
 
 	},
 }
@@ -57,6 +63,8 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// exportCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	exportCmd.Flags().StringVarP(&gh_personal_token, "ghp", "g", "", "github personal token ")
-	exportCmd.MarkFlagRequired("ghp")
+	exportCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
+	exportCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
+	exportCmd.MarkFlagRequired(flag_gh_token)
+	exportCmd.MarkFlagRequired(flag_gh_orga)
 }
