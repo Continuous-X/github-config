@@ -48,6 +48,8 @@ to quickly create a Cobra application.`,
 
 		fmt.Println(github.GHOrganization{Organisation: "Continuous-X", GhToken: gh_p_flag}.GetConfig(gh_o_flag))
 
+		fmt.Printf("github domain: %s\ngithub organization: %s\ngithub repository: %s\n", GithubDomain, GithubOrga, GithubRepo)
+
 	},
 }
 

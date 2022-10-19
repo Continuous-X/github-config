@@ -25,7 +25,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
+var (
+	cfgFile      string
+	GithubDomain string
+	GithubOrga   string
+	GithubRepo   string
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -75,8 +80,9 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".github-config" (without extension).
+		// Search config in home directory with name ".github-config.yaml".
 		viper.AddConfigPath(home)
+		viper.SetConfigType("yaml")
 		viper.SetConfigName(".github-config")
 	}
 
@@ -85,5 +91,9 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		GithubDomain = fmt.Sprintf("%v", viper.Get("backup.github.domain"))
+		GithubOrga = fmt.Sprintf("%v", viper.Get("backup.github.organization"))
+		GithubRepo = fmt.Sprintf("%v", viper.Get("backup.github.repository"))
+		fmt.Printf("github domain: %s\ngithub organization: %s\ngithub repository: %s\n", GithubDomain, GithubOrga, GithubRepo)
 	}
 }
