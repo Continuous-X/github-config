@@ -1,5 +1,5 @@
-backup:
+export:
   github:
-    domain: github.com
-    organization: Continuous-X
-    repository: github-config-backup
+    enterpriseDomain: ""
+    organization: "Continuous-X"
+    repository: "github-config-backup"

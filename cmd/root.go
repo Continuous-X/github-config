@@ -26,10 +26,18 @@ import (
 )
 
 var (
-	cfgFile      string
-	GithubDomain string
-	GithubOrga   string
-	GithubRepo   string
+	cfgFile                      string
+	ExportGithubEnterpriseDomain string
+	ExportGithubOrganization     string
+	ExportGithubRepository       string
+)
+
+const (
+	configKeyExport                       = "export"
+	configKeyExportGithub                 = configKeyExport + ".github"
+	configKeyExportGithubEnterpriseDomain = configKeyExportGithub + ".enterpriseDomain"
+	configKeyExportGithubOrganization     = configKeyExportGithub + ".organization"
+	configKeyExportGithubRepository       = configKeyExportGithub + ".repository"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -91,9 +99,9 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
-		GithubDomain = fmt.Sprintf("%v", viper.Get("backup.github.domain"))
-		GithubOrga = fmt.Sprintf("%v", viper.Get("backup.github.organization"))
-		GithubRepo = fmt.Sprintf("%v", viper.Get("backup.github.repository"))
-		fmt.Printf("github domain: %s\ngithub organization: %s\ngithub repository: %s\n", GithubDomain, GithubOrga, GithubRepo)
+		ExportGithubEnterpriseDomain = fmt.Sprintf("%v", viper.Get(configKeyExportGithubEnterpriseDomain))
+		ExportGithubOrganization = fmt.Sprintf("%v", viper.Get(configKeyExportGithubOrganization))
+		ExportGithubRepository = fmt.Sprintf("%v", viper.Get(configKeyExportGithubRepository))
+		fmt.Printf("readed config: \n- github enterpriseDomain: %s\n- github organization: %s\n- github repository: %s\n", ExportGithubEnterpriseDomain, ExportGithubOrganization, ExportGithubRepository)
 	}
 }

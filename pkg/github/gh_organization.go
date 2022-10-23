@@ -1,11 +1,10 @@
 package github
 
 import (
-	"encoding/json"
 	"fmt"
-	error2 "github-config/pkg/error"
-	"gopkg.in/yaml.v2"
 	"time"
+
+	"gopkg.in/yaml.v2"
 )
 
 type GHOrganization struct {
@@ -21,11 +20,6 @@ func (ghOrga GHOrganization) GetConfig(org string) (string, error) {
 		return "", listError
 	}
 
-	marshalledOrganization, err := json.Marshal(organization)
-	if err != nil {
-		error2.FailHandleCommand(err)
-	}
-
 	yamlMarshal, yamlMarshalErr := yaml.Marshal(organization)
 	if yamlMarshalErr != nil {
 		return "", yamlMarshalErr
@@ -33,7 +27,7 @@ func (ghOrga GHOrganization) GetConfig(org string) (string, error) {
 
 	fmt.Printf("output:\n%s\n", yamlMarshal)
 
-	return string(marshalledOrganization), nil
+	return string(yamlMarshal), nil
 }
 
 type GHOrganizationBackup struct {

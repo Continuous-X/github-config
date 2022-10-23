@@ -40,15 +40,34 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("export called")
-		gh_p_flag, _ := cmd.Flags().GetString(flag_gh_token)
-		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_token,gh_p_flag))
+		gh_personal_token, _ := cmd.Flags().GetString(flag_gh_token)
+		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_token, gh_personal_token))
 
-		gh_o_flag, _ := cmd.Flags().GetString(flag_gh_orga)
-		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_o_flag))
+		gh_organization, _ := cmd.Flags().GetString(flag_gh_orga)
+		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
 
-		fmt.Println(github.GHOrganization{Organisation: "Continuous-X", GhToken: gh_p_flag}.GetConfig(gh_o_flag))
+		orgaConfig, orgaConfigErr := github.GHOrganization{
+			Organisation: "Continuous-X", 
+			GhToken: gh_personal_token,
+			}.GetConfig(gh_organization)
+		if orgaConfigErr != nil {
+			fmt.Println(orgaConfig)
+		}
 
-		fmt.Printf("github domain: %s\ngithub organization: %s\ngithub repository: %s\n", GithubDomain, GithubOrga, GithubRepo)
+		fmt.Printf("github enterpriseDomain: %s\ngithub organization: %s\ngithub repository: %s\n", ExportGithubEnterpriseDomain, ExportGithubOrganization, ExportGithubRepository)
+
+		github.GHRepositoryContent{
+			Organisation:   ExportGithubOrganization,
+			RepositoryName: ExportGithubRepository,
+			GhToken: gh_personal_token,
+		}.CreateFile(
+			fmt.Sprintf("orgs/%s/organization-config.yaml",gh_organization),
+			"main",
+			orgaConfig,
+			fmt.Sprintf("export config from github organization '%s'", gh_organization),
+			"Lyle",
+			"lyle@github.com",
+		)
 
 	},
 }
