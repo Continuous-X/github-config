@@ -3,3 +3,4 @@ export:
     enterpriseDomain: ""
     organization: "Continuous-X"
     repository: "github-config-backup"
+    token: ""

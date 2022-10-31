@@ -47,21 +47,20 @@ to quickly create a Cobra application.`,
 		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
 
 		orgaConfig, orgaConfigErr := github.GHOrganization{
-			Organisation: "Continuous-X", 
-			GhToken: gh_personal_token,
-			}.GetConfig(gh_organization)
+			Organisation:       gh_organization,
+			GhToken:            gh_personal_token,
+			GhEnterpriseDomain: Config.Export.Github.EnterpriseDomain,
+		}.GetConfig()
 		if orgaConfigErr != nil {
 			fmt.Println(orgaConfig)
 		}
 
-		fmt.Printf("github enterpriseDomain: %s\ngithub organization: %s\ngithub repository: %s\n", ExportGithubEnterpriseDomain, ExportGithubOrganization, ExportGithubRepository)
-
 		github.GHRepositoryContent{
-			Organisation:   ExportGithubOrganization,
-			RepositoryName: ExportGithubRepository,
-			GhToken: gh_personal_token,
+			Organisation:   Config.Export.Github.Organization,
+			RepositoryName: Config.Export.Github.Repository,
+			GhToken:        Config.Export.Github.Token,
 		}.CreateFile(
-			fmt.Sprintf("orgs/%s/organization-config.yaml",gh_organization),
+			fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
 			"main",
 			orgaConfig,
 			fmt.Sprintf("export config from github organization '%s'", gh_organization),

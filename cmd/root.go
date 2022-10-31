@@ -26,18 +26,8 @@ import (
 )
 
 var (
-	cfgFile                      string
-	ExportGithubEnterpriseDomain string
-	ExportGithubOrganization     string
-	ExportGithubRepository       string
-)
-
-const (
-	configKeyExport                       = "export"
-	configKeyExportGithub                 = configKeyExport + ".github"
-	configKeyExportGithubEnterpriseDomain = configKeyExportGithub + ".enterpriseDomain"
-	configKeyExportGithubOrganization     = configKeyExportGithub + ".organization"
-	configKeyExportGithubRepository       = configKeyExportGithub + ".repository"
+	cfgFile string
+	Config  *GHCConfig
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -99,9 +89,16 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
-		ExportGithubEnterpriseDomain = fmt.Sprintf("%v", viper.Get(configKeyExportGithubEnterpriseDomain))
-		ExportGithubOrganization = fmt.Sprintf("%v", viper.Get(configKeyExportGithubOrganization))
-		ExportGithubRepository = fmt.Sprintf("%v", viper.Get(configKeyExportGithubRepository))
-		fmt.Printf("readed config: \n- github enterpriseDomain: %s\n- github organization: %s\n- github repository: %s\n", ExportGithubEnterpriseDomain, ExportGithubOrganization, ExportGithubRepository)
+		Config = &GHCConfig{}
+		configReadErr := viper.Unmarshal(Config)
+		if configReadErr != nil {
+			fmt.Printf("unable to decode into config struct, %v", configReadErr)
+		}
+		fmt.Printf("readed config: \n%v", Config)
+	}
+
+	for _, k := range viper.AllKeys() {
+		value := viper.GetString(k)
+		fmt.Printf("\"%s\":\"%s\"\n", k, value)
 	}
 }
