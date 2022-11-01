@@ -1,3 +1,5 @@
+github:
+  enterpriseDomain: ""
 export:
   github:
     enterpriseDomain: ""

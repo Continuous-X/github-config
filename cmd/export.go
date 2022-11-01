@@ -49,7 +49,7 @@ to quickly create a Cobra application.`,
 		orgaConfig, orgaConfigErr := github.GHOrganization{
 			Organisation:       gh_organization,
 			GhToken:            gh_personal_token,
-			GhEnterpriseDomain: Config.Export.Github.EnterpriseDomain,
+			GhEnterpriseDomain: Config.Github.EnterpriseDomain,
 		}.GetConfig()
 		if orgaConfigErr != nil {
 			fmt.Println(orgaConfig)

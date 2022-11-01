@@ -24,6 +24,7 @@ func (ghRepoContent GHRepositoryContent) CreateFile(path, branch, content, commi
 		},
 	}
 	repoContentResponse, _, repoContentResponseError := client.Repositories.CreateFile(ctx, ghRepoContent.Organisation, ghRepoContent.RepositoryName, path, opts)
+	//repoContentResponse, _, repoContentResponseError := client.Repositories.UpdateFile(ctx, ghRepoContent.Organisation, ghRepoContent.RepositoryName, path, opts)
 	if repoContentResponseError != nil {
 		return nil, repoContentResponseError
 	}
