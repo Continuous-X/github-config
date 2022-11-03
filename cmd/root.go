@@ -17,6 +17,8 @@ package cmd
 
 import (
 	"fmt"
+	"github-config/pkg/output"
+	"github-config/pkg/versions"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -28,6 +30,7 @@ import (
 var (
 	cfgFile string
 	Config  *GHCConfig
+	Output  *output.Output
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -46,12 +49,15 @@ var rootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
+		Output.AddLoggingLine(output.LogTypeError, "init", err.Error())
 		fmt.Println(err)
 		os.Exit(1)
 	}
 }
 
 func init() {
+
+	initOutput()
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -74,6 +80,7 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
+			Output.AddLoggingLine(output.LogTypeError, "init", err.Error())
 			fmt.Println(err)
 			os.Exit(1)
 		}
@@ -88,17 +95,29 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
+		Output.AddLoggingLine(output.LogTypeInfo, "init", fmt.Sprintf("Using config file:", viper.ConfigFileUsed()))
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 		Config = &GHCConfig{}
 		configReadErr := viper.Unmarshal(Config)
 		if configReadErr != nil {
+			Output.AddLoggingLine(output.LogTypeError, "init", fmt.Sprintf("unable to decode into config struct, %v", configReadErr))
 			fmt.Printf("unable to decode into config struct, %v", configReadErr)
 		}
+		Output.AddLoggingLine(output.LogTypeInfo, "init", fmt.Sprintf("readed config: \n%v", Config))
 		fmt.Printf("readed config: \n%v", Config)
 	}
 
 	for _, k := range viper.AllKeys() {
 		value := viper.GetString(k)
-		fmt.Printf("\"%s\":\"%s\"\n", k, value)
+		Output.AddLoggingLine(output.LogTypeInfo, "init", fmt.Sprintf("'%s':'%s'", k, value))
+		fmt.Printf("\n\"%s\":\"%s\"", k, value)
+	}
+}
+
+func initOutput() {
+	Output = &output.Output{}
+	Output.Info = output.Info{
+		AppName: "appname",
+		Version: versions.MajorFromGit,
 	}
 }
