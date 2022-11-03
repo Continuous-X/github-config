@@ -5,21 +5,25 @@ import (
 )
 
 type GHRepositoryContent struct {
-	Organisation   string
-	RepositoryName string
-	GhToken        string
+	Organisation       string
+	RepositoryName     string
+	GhToken            string
+	GhEnterpriseDomain string
 }
 
 func (ghRepoContent GHRepositoryContent) CreateFile(path, branch, content, commitMessage, userName, userMail string) (*github.RepositoryContentResponse, error) {
 
-	client, ctx := GHBase{ghToken: ghRepoContent.GhToken}.getCient()
+	client, ctx := GHBase{
+		ghToken:   ghRepoContent.GhToken,
+		gheDomain: ghRepoContent.GhEnterpriseDomain,
+	}.getCient()
 	fileContent := []byte(content)
 	opts := &github.RepositoryContentFileOptions{
 		Message: github.String(commitMessage),
 		Content: fileContent,
-		Branch: github.String(branch),
+		Branch:  github.String(branch),
 		Committer: &github.CommitAuthor{
-			Name: github.String(userName),
+			Name:  github.String(userName),
 			Email: github.String(userMail),
 		},
 	}
