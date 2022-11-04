@@ -39,7 +39,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		Output.AddLoggingLine(output.LogTypeInfo, "export", "command called")
+		LogOutput.AddLoggingLine(output.LogTypeInfo, "export", "command called")
 
 		fmt.Println("export called")
 		gh_personal_token, _ := cmd.Flags().GetString(flag_gh_token)
@@ -58,9 +58,9 @@ to quickly create a Cobra application.`,
 		}
 
 		github.GHRepositoryContent{
-			Organisation:   Config.Export.Github.Organization,
-			RepositoryName: Config.Export.Github.Repository,
-			GhToken:        Config.Export.Github.Token,
+			Organisation:       Config.Export.Github.Organization,
+			RepositoryName:     Config.Export.Github.Repository,
+			GhToken:            Config.Export.Github.Token,
 			GhEnterpriseDomain: Config.Github.EnterpriseDomain,
 		}.CreateFile(
 			fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
@@ -70,6 +70,8 @@ to quickly create a Cobra application.`,
 			"Lyle",
 			"lyle@github.com",
 		)
+
+		LogOutput.PrintLogging()
 
 	},
 }

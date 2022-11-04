@@ -17,6 +17,7 @@ package main
 
 import (
 	"github-config/cmd"
+	"github-config/pkg/output"
 	"github-config/pkg/versions"
 	"strings"
 )
@@ -38,5 +39,11 @@ func main() {
 		versions.MinorFromGit = versionArray[1]
 	}
 	versions.BuildDate = buildTime
+	cmd.LogOutput = &output.Output{}
+	cmd.LogOutput.Info = output.Info{
+		AppName: "ghc",
+		Version: versions.MajorFromGit,
+	}
+	cmd.LogOutput.Logging = output.Logging{}
 	cmd.Execute()
 }

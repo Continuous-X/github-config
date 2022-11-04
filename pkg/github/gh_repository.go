@@ -2,7 +2,7 @@ package github
 
 import (
 	"fmt"
-	"github-config/pkg/output"
+	"log"
 
 	"github.com/google/go-github/v47/github"
 )
@@ -26,7 +26,7 @@ func (ghRepo GHRepository) getRepositoryList() ([]*github.Repository, error) {
 		return repositoryList, listError
 	}
 	for index, repository := range repositoryList {
-		output.PrintLogfile(fmt.Sprintf("%d: %s", index, repository.GetFullName()))
+		log.Print(fmt.Sprintf("%d: %s", index, repository.GetFullName()))
 	}
 	return repositoryList, nil
 }

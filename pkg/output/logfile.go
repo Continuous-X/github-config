@@ -5,9 +5,11 @@ import (
 	"time"
 )
 
+var OutputStruct Output
+
 type Output struct {
 	Logging Logging `yaml:"logging" json:"logging"`
-	Info    Info    `yaml:"info" json:"info"`
+	Info    Info   `yaml:"info" json:"info"`
 }
 
 type Info struct {
@@ -33,16 +35,16 @@ const (
 	LogTypeDebug   = "DEBUG"
 )
 
-func (out Output) AddLoggingLine(logType, command, message string) {
+func (outObj *Output) AddLoggingLine(logType, command, message string) {
 	line := Line{
 		Timestamp: time.Now().String(),
 		Type:      logType,
 		Command:   command,
 		Message:   message,
 	}
-	out.Logging.Lines = append(out.Logging.Lines, line)
+	outObj.Logging.Lines = append(outObj.Logging.Lines, line)
 }
 
-func PrintLogfile(message string) {
-	log.Print(message)
+func (outObj *Output) PrintLogging() {
+	log.Printf("%v", outObj)
 }
