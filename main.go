@@ -42,7 +42,7 @@ func main() {
 	cmd.LogOutput = &output.Output{}
 	cmd.LogOutput.Info = output.Info{
 		AppName: "ghc",
-		Version: versions.MajorFromGit,
+		Version: version,
 	}
 	cmd.LogOutput.Logging = output.Logging{}
 	cmd.Execute()

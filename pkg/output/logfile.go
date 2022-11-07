@@ -1,6 +1,7 @@
 package output
 
 import (
+	"encoding/json"
 	"log"
 	"time"
 )
@@ -46,5 +47,9 @@ func (outObj *Output) AddLoggingLine(logType, command, message string) {
 }
 
 func (outObj *Output) PrintLogging() {
-	log.Printf("%v", outObj)
+		marshalledOutput, err := json.Marshal(outObj)
+		if err != nil {
+			log.Printf("failed output marshal: %s", err)
+		}
+		log.Printf("%s", string(marshalledOutput))
 }
