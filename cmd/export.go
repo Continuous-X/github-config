@@ -62,7 +62,7 @@ to quickly create a Cobra application.`,
 			RepositoryName:     Config.Export.Github.Repository,
 			GhToken:            Config.Export.Github.Token,
 			GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-		}.CreateFile(
+		}.WriteContent(
 			fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
 			"main",
 			orgaConfig,
