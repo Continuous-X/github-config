@@ -26,6 +26,7 @@ import (
 var (
 	gh_personal_token string
 	gh_organization   string
+	gh_repository     string
 )
 
 // exportCmd represents the export command
@@ -48,28 +49,32 @@ to quickly create a Cobra application.`,
 		gh_organization, _ := cmd.Flags().GetString(flag_gh_orga)
 		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
 
+		gh_repository, _ := cmd.Flags().GetString(flag_gh_repo)
+		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_repo, gh_repository))
+
 		orgaConfig, orgaConfigErr := github.GHOrganization{
 			Organisation:       gh_organization,
 			GhToken:            gh_personal_token,
 			GhEnterpriseDomain: Config.Github.EnterpriseDomain,
 		}.GetConfig()
 		if orgaConfigErr != nil {
-			fmt.Println(orgaConfig)
-		}
+			LogOutput.AddLoggingLine(output.LogTypeError, "export", orgaConfigErr.Error())
+		} else {
 
-		github.GHRepositoryContent{
-			Organisation:       Config.Export.Github.Organization,
-			RepositoryName:     Config.Export.Github.Repository,
-			GhToken:            Config.Export.Github.Token,
-			GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-		}.WriteContent(
-			fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
-			"main",
-			orgaConfig,
-			fmt.Sprintf("export config from github organization '%s'", gh_organization),
-			"Lyle",
-			"lyle@github.com",
-		)
+			github.GHRepositoryContent{
+				Organisation:       Config.Export.Github.Organization,
+				RepositoryName:     Config.Export.Github.Repository,
+				GhToken:            Config.Export.Github.Token,
+				GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+			}.WriteContent(
+				fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
+				"main",
+				orgaConfig,
+				fmt.Sprintf("export config from github organization '%s'", gh_organization),
+				"Lyle",
+				"lyle@github.com",
+			)
+		}
 
 		LogOutput.PrintLogging()
 
@@ -90,6 +95,7 @@ func init() {
 	// exportCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	exportCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
 	exportCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
+	exportCmd.Flags().StringVarP(&gh_repository, flag_gh_repo, flag_gh_repo_short, "", flag_gh_repo_description)
 	exportCmd.MarkFlagRequired(flag_gh_token)
 	exportCmd.MarkFlagRequired(flag_gh_orga)
 }
