@@ -52,28 +52,55 @@ to quickly create a Cobra application.`,
 		gh_repository, _ := cmd.Flags().GetString(flag_gh_repo)
 		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_repo, gh_repository))
 
-		orgaConfig, orgaConfigErr := github.GHOrganization{
-			Organisation:       gh_organization,
-			GhToken:            gh_personal_token,
-			GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-		}.GetConfig()
-		if orgaConfigErr != nil {
-			LogOutput.AddLoggingLine(output.LogTypeError, "export", orgaConfigErr.Error())
+		if len(gh_repository) > 0 {
+			repoConfig, repoConfigErr := github.GHRepository{
+				Organisation: github.GHOrganization{
+					Organisation:       gh_organization,
+					GhToken:            gh_personal_token,
+					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+				},
+				Repository: gh_repository,
+			}.GetConfig()
+			if repoConfigErr != nil {
+				LogOutput.AddLoggingLine(output.LogTypeError, "export", repoConfigErr.Error())
+			} else {
+				github.GHRepositoryContent{
+					Organisation:       Config.Export.Github.Organization,
+					RepositoryName:     Config.Export.Github.Repository,
+					GhToken:            Config.Export.Github.Token,
+					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+				}.WriteContent(
+					fmt.Sprintf("orgs/%s/repos/%s/repository-config.yaml", gh_organization, gh_repository),
+					"main",
+					repoConfig,
+					fmt.Sprintf("export config from github repository '%s'", gh_repository),
+					"Lyle",
+					"lyle@github.com",
+				)
+			}
 		} else {
-
-			github.GHRepositoryContent{
-				Organisation:       Config.Export.Github.Organization,
-				RepositoryName:     Config.Export.Github.Repository,
-				GhToken:            Config.Export.Github.Token,
+			orgaConfig, orgaConfigErr := github.GHOrganization{
+				Organisation:       gh_organization,
+				GhToken:            gh_personal_token,
 				GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-			}.WriteContent(
-				fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
-				"main",
-				orgaConfig,
-				fmt.Sprintf("export config from github organization '%s'", gh_organization),
-				"Lyle",
-				"lyle@github.com",
-			)
+			}.GetConfig()
+			if orgaConfigErr != nil {
+				LogOutput.AddLoggingLine(output.LogTypeError, "export", orgaConfigErr.Error())
+			} else {
+				github.GHRepositoryContent{
+					Organisation:       Config.Export.Github.Organization,
+					RepositoryName:     Config.Export.Github.Repository,
+					GhToken:            Config.Export.Github.Token,
+					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+				}.WriteContent(
+					fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
+					"main",
+					orgaConfig,
+					fmt.Sprintf("export config from github organization '%s'", gh_organization),
+					"Lyle",
+					"lyle@github.com",
+				)
+			}
 		}
 
 		LogOutput.PrintLogging()
