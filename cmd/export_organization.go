@@ -9,77 +9,59 @@ import (
 )
 
 var organizationCmd = &cobra.Command{
-	Use:   "organization",
+	Use:   cmd_organization,
 	Short: "export the github organization config",
-	Long: `export the github organization config. For example:
+	Long: `export the github organization configuration in the backup repository.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	......`,
 	Run: func(cmd *cobra.Command, args []string) {
-		LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.Name(), "command called")
+		LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.CommandPath(), "command started")
 
-		fmt.Println("export called")
-		gh_personal_token, _ := cmd.Flags().GetString(flag_gh_token)
-		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_token, gh_personal_token))
-
-		gh_organization, _ := cmd.Flags().GetString(flag_gh_orga)
-		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
-
-		gh_repository, _ := cmd.Flags().GetString(flag_gh_repo)
-		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_repo, gh_repository))
-
-		if len(gh_repository) > 0 {
-			repoConfig, repoConfigErr := github.GHRepository{
-				Organisation: github.GHOrganization{
-					Organisation:       gh_organization,
-					GhToken:            gh_personal_token,
-					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-				},
-				Repository: gh_repository,
-			}.GetConfig()
-			if repoConfigErr != nil {
-				LogOutput.AddLoggingLine(output.LogTypeError, "export", repoConfigErr.Error())
-			} else {
-				github.GHRepositoryContent{
-					Organisation:       Config.Export.Github.Organization,
-					RepositoryName:     Config.Export.Github.Repository,
-					GhToken:            Config.Export.Github.Token,
-					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-				}.WriteContent(
-					fmt.Sprintf("orgs/%s/repos/%s/repository-config.yaml", gh_organization, gh_repository),
-					"main",
-					repoConfig,
-					fmt.Sprintf("export config from github repository '%s'", gh_repository),
-					"Lyle",
-					"lyle@github.com",
-				)
-			}
-		} else {
-			orgaConfig, orgaConfigErr := github.GHOrganization{
-				Organisation:       gh_organization,
-				GhToken:            gh_personal_token,
-				GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-			}.GetConfig()
-			if orgaConfigErr != nil {
-				LogOutput.AddLoggingLine(output.LogTypeError, "export", orgaConfigErr.Error())
-			} else {
-				github.GHRepositoryContent{
-					Organisation:       Config.Export.Github.Organization,
-					RepositoryName:     Config.Export.Github.Repository,
-					GhToken:            Config.Export.Github.Token,
-					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-				}.WriteContent(
-					fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
-					"main",
-					orgaConfig,
-					fmt.Sprintf("export config from github organization '%s'", gh_organization),
-					"Lyle",
-					"lyle@github.com",
-				)
-			}
+		readed_flag_gh_token := cmd.Flag(flag_gh_token)
+		if readed_flag_gh_token.Changed {
+			// TODO: input validation
+			gh_personal_token = readed_flag_gh_token.Value.String()
+			output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_token, gh_personal_token))
 		}
 
+		readed_flag_gh_orga := cmd.Flag(flag_gh_orga)
+		if readed_flag_gh_orga.Changed {
+			// TODO: input validation
+			gh_organization = readed_flag_gh_orga.Value.String()
+			output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
+		}
+
+		if readed_flag_all_gh_repos := cmd.Flag(flag_all_gh_repos); readed_flag_all_gh_repos.Changed {
+			output.PrintCliInfo(fmt.Sprintf("%s - '%v'", flag_all_gh_repos, readed_flag_all_gh_repos.Changed))
+			LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.CommandPath(), "export all repository and organization configuration")
+		} else {
+			output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_all_gh_repos, "export organization configuration"))
+		}
+
+		orgaConfig, orgaConfigErr := github.GHOrganization{
+			Organisation:       gh_organization,
+			GhToken:            gh_personal_token,
+			GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+		}.GetConfig()
+		if orgaConfigErr != nil {
+			LogOutput.AddLoggingLine(output.LogTypeError, cmd.CommandPath(), orgaConfigErr.Error())
+		} else {
+			github.GHRepositoryContent{
+				Organisation:       Config.Export.Github.Organization,
+				RepositoryName:     Config.Export.Github.Repository,
+				GhToken:            Config.Export.Github.Token,
+				GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+			}.WriteContent(
+				fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
+				"main",
+				orgaConfig,
+				fmt.Sprintf("export config from github organization '%s'", gh_organization),
+				"Lyle",
+				"lyle@github.com",
+			)
+		}
+
+		LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.CommandPath(), "command ended")
 		LogOutput.PrintLogging()
 
 	},
@@ -88,18 +70,10 @@ to quickly create a Cobra application.`,
 func init() {
 	exportCmd.AddCommand(organizationCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// exportCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// exportCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	organizationCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
 	organizationCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
-	organizationCmd.Flags().StringVarP(&gh_repository, flag_gh_repo, flag_gh_repo_short, "", flag_gh_repo_description)
+	organizationCmd.Flags().BoolP(flag_all_gh_repos, flag_all_gh_repos_short, false, flag_all_gh_repos_description)
+
 	organizationCmd.MarkFlagRequired(flag_gh_token)
 	organizationCmd.MarkFlagRequired(flag_gh_orga)
 }
