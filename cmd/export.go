@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-	"github-config/pkg/github"
 	"github-config/pkg/output"
 
 	"github.com/spf13/cobra"
@@ -31,7 +29,7 @@ var (
 
 // exportCmd represents the export command
 var exportCmd = &cobra.Command{
-	Use:   "export",
+	Use:   cmd_export,
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -40,89 +38,13 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		LogOutput.AddLoggingLine(output.LogTypeInfo, "export", "command called")
-
-		fmt.Println("export called")
-		gh_personal_token, _ := cmd.Flags().GetString(flag_gh_token)
-		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_token, gh_personal_token))
-
-		gh_organization, _ := cmd.Flags().GetString(flag_gh_orga)
-		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
-
-		gh_repository, _ := cmd.Flags().GetString(flag_gh_repo)
-		output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_repo, gh_repository))
-
-		if len(gh_repository) > 0 {
-			repoConfig, repoConfigErr := github.GHRepository{
-				Organisation: github.GHOrganization{
-					Organisation:       gh_organization,
-					GhToken:            gh_personal_token,
-					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-				},
-				Repository: gh_repository,
-			}.GetConfig()
-			if repoConfigErr != nil {
-				LogOutput.AddLoggingLine(output.LogTypeError, "export", repoConfigErr.Error())
-			} else {
-				github.GHRepositoryContent{
-					Organisation:       Config.Export.Github.Organization,
-					RepositoryName:     Config.Export.Github.Repository,
-					GhToken:            Config.Export.Github.Token,
-					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-				}.WriteContent(
-					fmt.Sprintf("orgs/%s/repos/%s/repository-config.yaml", gh_organization, gh_repository),
-					"main",
-					repoConfig,
-					fmt.Sprintf("export config from github repository '%s'", gh_repository),
-					"Lyle",
-					"lyle@github.com",
-				)
-			}
-		} else {
-			orgaConfig, orgaConfigErr := github.GHOrganization{
-				Organisation:       gh_organization,
-				GhToken:            gh_personal_token,
-				GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-			}.GetConfig()
-			if orgaConfigErr != nil {
-				LogOutput.AddLoggingLine(output.LogTypeError, "export", orgaConfigErr.Error())
-			} else {
-				github.GHRepositoryContent{
-					Organisation:       Config.Export.Github.Organization,
-					RepositoryName:     Config.Export.Github.Repository,
-					GhToken:            Config.Export.Github.Token,
-					GhEnterpriseDomain: Config.Github.EnterpriseDomain,
-				}.WriteContent(
-					fmt.Sprintf("orgs/%s/organization-config.yaml", gh_organization),
-					"main",
-					orgaConfig,
-					fmt.Sprintf("export config from github organization '%s'", gh_organization),
-					"Lyle",
-					"lyle@github.com",
-				)
-			}
-		}
-
+		LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.CommandPath(), "command started")
+		cmd.Usage()
+		LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.CommandPath(), "command ended")
 		LogOutput.PrintLogging()
-
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(exportCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// exportCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// exportCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	exportCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
-	exportCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
-	exportCmd.Flags().StringVarP(&gh_repository, flag_gh_repo, flag_gh_repo_short, "", flag_gh_repo_description)
-	exportCmd.MarkFlagRequired(flag_gh_token)
-	exportCmd.MarkFlagRequired(flag_gh_orga)
 }
