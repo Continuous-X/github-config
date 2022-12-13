@@ -19,7 +19,10 @@ import (
 	"github-config/cmd"
 	"github-config/pkg/output"
 	"github-config/pkg/versions"
+	"os"
 	"strings"
+
+	"golang.org/x/exp/slog"
 )
 
 var (
@@ -29,6 +32,12 @@ var (
 )
 
 func main() {
+
+	// create logging handler
+	logger := slog.New(slog.NewJSONHandler(os.Stdout))
+	// set logger as default
+	slog.SetDefault(logger)
+
 	versions.CommitFromGit = sha1ver
 	versions.VersionFromGit = version
 	versionArray := strings.Split(version, ".")
