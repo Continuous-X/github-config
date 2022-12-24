@@ -13,6 +13,10 @@ const (
 	flag_all_gh_repos             = "all-repositories"
 	flag_all_gh_repos_short       = ""
 	flag_all_gh_repos_description = "[default false] / all github repositories in organization"
+	flag_dry_run                  = "dry-run"
+	flag_dry_run_short            = ""
+	flag_dry_run_default          = "none"
+	flag_dry_run_description      = "[default none] / Must be \"none\" or \"server\". If server strategy, only print the config informations that would be sent"
 
 	// commands
 	cmd_export       = "export"
