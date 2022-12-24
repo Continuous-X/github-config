@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github-config/pkg/github"
-	"github-config/pkg/output"
+
 	"golang.org/x/exp/slog"
 
 	"github.com/spf13/cobra"
@@ -22,14 +22,14 @@ var organizationCmd = &cobra.Command{
 		if readed_flag_gh_token.Changed {
 			// TODO: input validation
 			gh_personal_token = readed_flag_gh_token.Value.String()
-			output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_token, gh_personal_token))
+			slog.Info(fmt.Sprintf("%s - '%s'", flag_gh_token, gh_personal_token))
 		}
 
 		readed_flag_gh_orga := cmd.Flag(flag_gh_orga)
 		if readed_flag_gh_orga.Changed {
 			// TODO: input validation
 			gh_organization = readed_flag_gh_orga.Value.String()
-			output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
+			slog.Info(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
 		}
 
 		readed_flag_all_gh_repos := cmd.Flag(flag_all_gh_repos)

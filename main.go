@@ -34,6 +34,7 @@ func main() {
 
 	// create logging handler
 	logger := slog.New(slog.NewJSONHandler(os.Stdout))
+	logger.Enabled(slog.LevelDebug)
 	// set logger as default
 	slog.SetDefault(logger)
 

@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,13 +16,14 @@ limitations under the License.
 package cmd
 
 import (
-	error2 "github-config/pkg/error"
-	"github-config/pkg/versions"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/cobra"
-	"k8s.io/apimachinery/pkg/version"
+	"github-config/pkg/versions"
 	"runtime"
+
+	"github.com/spf13/cobra"
+	"golang.org/x/exp/slog"
+	"k8s.io/apimachinery/pkg/version"
 )
 
 // versionCmd represents the versions command
@@ -39,7 +40,7 @@ to quickly create a Cobra application.`,
 		versionInfo := getVersionInfo()
 		marshalledVersionInfo, err := json.Marshal(versionInfo)
 		if err != nil {
-			error2.FailHandleCommand(err)
+			slog.Error("ooops", err)
 		}
 		fmt.Println(string(marshalledVersionInfo))
 	},
