@@ -28,8 +28,9 @@ import (
 )
 
 var (
-	cfgFile   string
-	Config    *GHCConfig
+	cfgFile string
+	Config  *GHCConfig
+	dry_run string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -49,7 +50,6 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		slog.Error("init error", err)
-		//fmt.Println(err)
 		os.Exit(1)
 	}
 }
@@ -63,10 +63,12 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.github-config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&dry_run, flag_dry_run, flag_dry_run_default, flag_dry_run_description)
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -92,7 +94,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		slog.Info(fmt.Sprintf("Using config file:", viper.ConfigFileUsed()))
+		slog.Info("Using config file:", viper.ConfigFileUsed())
 		Config = &GHCConfig{}
 		configReadErr := viper.Unmarshal(Config)
 		if configReadErr != nil {
