@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github-config/pkg/github"
 	"github-config/pkg/output"
+	"golang.org/x/exp/slog"
 
 	"github.com/spf13/cobra"
 )
@@ -15,7 +16,7 @@ var organizationCmd = &cobra.Command{
 
 	......`,
 	Run: func(cmd *cobra.Command, args []string) {
-		LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.CommandPath(), "command started")
+		slog.Debug("command started", "cmd", cmd.CommandPath())
 
 		readed_flag_gh_token := cmd.Flag(flag_gh_token)
 		if readed_flag_gh_token.Changed {
@@ -31,11 +32,13 @@ var organizationCmd = &cobra.Command{
 			output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_gh_orga, gh_organization))
 		}
 
-		if readed_flag_all_gh_repos := cmd.Flag(flag_all_gh_repos); readed_flag_all_gh_repos.Changed {
-			output.PrintCliInfo(fmt.Sprintf("%s - '%v'", flag_all_gh_repos, readed_flag_all_gh_repos.Changed))
-			LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.CommandPath(), "export all repository and organization configuration")
+		readed_flag_all_gh_repos := cmd.Flag(flag_all_gh_repos)
+		slog.Debug(fmt.Sprintf("%s - '%v'", flag_all_gh_repos, readed_flag_all_gh_repos.Changed))
+
+		if readed_flag_all_gh_repos.Changed {
+			slog.Info("export all repository and organization configuration", "cmd", cmd.CommandPath())
 		} else {
-			output.PrintCliInfo(fmt.Sprintf("%s - '%s'", flag_all_gh_repos, "export organization configuration"))
+			slog.Info("export organization configuration", "cmd", cmd.CommandPath())
 		}
 
 		orgaConfig, orgaConfigErr := github.GHOrganization{
@@ -44,7 +47,7 @@ var organizationCmd = &cobra.Command{
 			GhEnterpriseDomain: Config.Github.EnterpriseDomain,
 		}.GetConfig()
 		if orgaConfigErr != nil {
-			LogOutput.AddLoggingLine(output.LogTypeError, cmd.CommandPath(), orgaConfigErr.Error())
+			slog.Error("oops", orgaConfigErr)
 		} else {
 			github.GHRepositoryContent{
 				Organisation:       Config.Export.Github.Organization,
@@ -61,8 +64,7 @@ var organizationCmd = &cobra.Command{
 			)
 		}
 
-		LogOutput.AddLoggingLine(output.LogTypeInfo, cmd.CommandPath(), "command ended")
-		LogOutput.PrintLogging()
+		slog.Debug("command ended", "cmd", cmd.CommandPath())
 
 	},
 }
