@@ -35,12 +35,6 @@ var organizationCmd = &cobra.Command{
 		readed_flag_all_gh_repos := cmd.Flag(flag_all_gh_repos)
 		slog.Debug(fmt.Sprintf("%s - '%v'", flag_all_gh_repos, readed_flag_all_gh_repos.Changed))
 
-		if readed_flag_all_gh_repos.Changed {
-			slog.Info("export all repository and organization configuration", "cmd", cmd.CommandPath())
-		} else {
-			slog.Info("export organization configuration", "cmd", cmd.CommandPath())
-		}
-
 		orgaConfig, orgaConfigErr := github.GHOrganization{
 			Organisation:       gh_organization,
 			GhToken:            gh_personal_token,
@@ -62,6 +56,49 @@ var organizationCmd = &cobra.Command{
 				"Lyle",
 				"lyle@github.com",
 			)
+		}
+
+		if readed_flag_all_gh_repos.Changed {
+			slog.Info("export all repository and organization configuration", "cmd", cmd.CommandPath())
+			repoList, repoListErr := github.GHOrganization{
+				Organisation:       gh_organization,
+				GhToken:            gh_personal_token,
+				GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+			}.GetRepositories()
+			if repoListErr != nil {
+				slog.Error("oops", repoListErr)
+			} else {
+				for _, repo := range repoList {
+					repoConfig, repoConfigErr := github.GHRepository{
+						Organisation: github.GHOrganization{
+							Organisation:       gh_organization,
+							GhToken:            gh_personal_token,
+							GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+						},
+						Repository: *repo.Name,
+					}.GetConfig()
+
+					if repoConfigErr != nil {
+						slog.Error("oops", repoConfigErr)
+					} else {
+						github.GHRepositoryContent{
+							Organisation:       Config.Export.Github.Organization,
+							RepositoryName:     Config.Export.Github.Repository,
+							GhToken:            Config.Export.Github.Token,
+							GhEnterpriseDomain: Config.Github.EnterpriseDomain,
+						}.WriteContent(
+							fmt.Sprintf("orgs/%s/repos/%s/repository-config.yaml", gh_organization, *repo.Name),
+							"main",
+							repoConfig,
+							fmt.Sprintf("export config from github repository '%s'", *repo.Name),
+							"Lyle",
+							"lyle@github.com",
+						)
+					}
+				}
+			}
+		} else {
+			slog.Info("export just organization configuration", "cmd", cmd.CommandPath())
 		}
 
 		slog.Debug("command ended", "cmd", cmd.CommandPath())

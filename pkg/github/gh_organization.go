@@ -1,7 +1,7 @@
 package github
 
 import (
-	"fmt"
+	"github.com/google/go-github/v47/github"
 
 	"gopkg.in/yaml.v2"
 )
@@ -10,6 +10,18 @@ type GHOrganization struct {
 	Organisation       string
 	GhToken            string
 	GhEnterpriseDomain string
+}
+
+func (ghOrga GHOrganization) GetRepositories() ([]*github.Repository, error) {
+	client, ctx := GHBase{
+		ghToken:   ghOrga.GhToken,
+		gheDomain: ghOrga.GhEnterpriseDomain,
+	}.getCient()
+	repoList, _, listError := client.Repositories.ListByOrg(ctx, ghOrga.Organisation, nil)
+	if listError != nil {
+		return nil, listError
+	}
+	return repoList, nil
 }
 
 func (ghOrga GHOrganization) GetConfig() (string, error) {
@@ -34,8 +46,6 @@ func (ghOrga GHOrganization) GetConfig() (string, error) {
 	if profileMarshalErr != nil {
 		return "", profileMarshalErr
 	}
-
-	fmt.Printf("output:\n%s\n", profileMarshal)
 
 	return string(profileMarshal), nil
 }
