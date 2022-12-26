@@ -17,11 +17,21 @@ func (ghOrga GHOrganization) GetRepositories() ([]*github.Repository, error) {
 		ghToken:   ghOrga.GhToken,
 		gheDomain: ghOrga.GhEnterpriseDomain,
 	}.getCient()
-	repoList, _, listError := client.Repositories.ListByOrg(ctx, ghOrga.Organisation, nil)
-	if listError != nil {
-		return nil, listError
+	var repos []*github.Repository
+	var opts = github.RepositoryListByOrgOptions{}
+	opts.PerPage = 50
+	opts.Page = 1
+
+	for opts.Page > 0 {
+		readedRepoList, response, listError := client.Repositories.ListByOrg(ctx, ghOrga.Organisation, &opts)
+		if listError != nil {
+			return nil, listError
+		}
+		repos = append(repos, readedRepoList...)
+		opts.Page = response.NextPage
 	}
-	return repoList, nil
+
+	return repos, nil
 }
 
 func (ghOrga GHOrganization) GetConfig() (string, error) {
