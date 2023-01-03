@@ -22,8 +22,8 @@ import (
 )
 
 // exportCmd represents the export command
-var exportCmd = &cobra.Command{
-	Use:   cmd_export,
+var diffCmd = &cobra.Command{
+	Use:   cmd_diff,
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -39,5 +39,5 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	rootCmd.AddCommand(exportCmd)
+	rootCmd.AddCommand(diffCmd)
 }

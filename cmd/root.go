@@ -31,6 +31,9 @@ var (
 	cfgFile string
 	Config  *GHCConfig
 	dry_run string
+	gh_personal_token string
+	gh_organization   string
+	gh_repository     string
 )
 
 // rootCmd represents the base command when called without any subcommands

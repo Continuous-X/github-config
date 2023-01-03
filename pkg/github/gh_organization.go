@@ -1,7 +1,9 @@
 package github
 
 import (
-	"github.com/google/go-github/v47/github"
+	"encoding/json"
+
+	"github.com/google/go-github/v48/github"
 
 	"gopkg.in/yaml.v2"
 )
@@ -58,6 +60,29 @@ func (ghOrga GHOrganization) GetConfig() (string, error) {
 	}
 
 	return string(profileMarshal), nil
+}
+
+func (ghOrga GHOrganization) WriteConfigProfile(config GHOrgaProfile) (error) {
+
+	marshal, marshalErr := json.Marshal(config)
+	if marshalErr != nil {
+		return marshalErr
+	}
+
+	newProfile := &github.Organization{}
+	json.Unmarshal(marshal, newProfile)
+
+	client, ctx := GHBase{
+		ghToken:   ghOrga.GhToken,
+		gheDomain: ghOrga.GhEnterpriseDomain,
+	}.getCient()
+
+	_, _, editErr := client.Organizations.Edit(ctx, *newProfile.Name, newProfile)
+	if editErr != nil {
+		return editErr
+	}
+
+	return nil
 }
 
 type GHOrganizationSettings struct {

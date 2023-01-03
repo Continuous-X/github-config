@@ -1,7 +1,7 @@
 package github
 
 import (
-	"github.com/google/go-github/v47/github"
+	"github.com/google/go-github/v48/github"
 )
 
 type GHRepositoryContent struct {
@@ -16,7 +16,7 @@ func (ghRepoContent GHRepositoryContent) WriteContent(path, branch, content, com
 	fileContent, fileContentErr := ghRepoContent.GetFileContent(path, branch)
 	if fileContentErr != nil {
 		return ghRepoContent.CreateFile(path, branch, content, commitMessage, userName, userMail)
-	} 
+	}
 	return ghRepoContent.UpdateFile(path, branch, content, *fileContent.SHA, commitMessage, userName, userMail)
 }
 
@@ -83,5 +83,20 @@ func (ghRepoContent GHRepositoryContent) GetFileContent(path, branch string) (*g
 	if repoContentResponseError != nil {
 		return nil, repoContentResponseError
 	}
+
 	return fileContent, nil
+}
+
+func (ghRepoContent GHRepositoryContent) GetFileContentDecoded(path, branch string) (string, error) {
+
+	fileContent, fileContentErr := ghRepoContent.GetFileContent(path, branch)
+	if fileContentErr != nil {
+		return "", fileContentErr
+	}
+
+	decodedFileContent, decodedErr := fileContent.GetContent()
+	if decodedErr != nil {
+		return "", decodedErr
+	}
+	return decodedFileContent, nil
 }
