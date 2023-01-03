@@ -9,13 +9,14 @@ HTTP_PROXY_PORT="3128"
 
 dependency-check.sh --project github-config \
     -f HTML \
-    --failOnCVSS 7 \
+    --failOnCVSS 5 \
     --prettyPrint \
     --enableExperimental \
     -s . \
     -l ${OUTPUT_PATH}/depcheck.log \
     -o ${OUTPUT_PATH} \
-    --suppression dependency-check-suppression.xml \
     --proxyserver ${HTTP_PROXY_HOST} \
     --proxyport ${HTTP_PROXY_PORT} \
     --nonProxyHosts ""
+
+#    --suppression dependency-check-suppression.xml \
