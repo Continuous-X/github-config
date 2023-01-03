@@ -20,6 +20,8 @@ const (
 
 	// commands
 	cmd_export       = "export"
+	cmd_diff         = "diff"
+	cmd_sync         = "sync"
 	cmd_organization = "organization"
 	cmd_repository   = "repository"
 )

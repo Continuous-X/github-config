@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var organizationCmd = &cobra.Command{
+var exportOrganizationCmd = &cobra.Command{
 	Use:   cmd_organization,
 	Short: "export the github organization config",
 	Long: `export the github organization configuration in the backup repository.
@@ -107,12 +107,12 @@ var organizationCmd = &cobra.Command{
 }
 
 func init() {
-	exportCmd.AddCommand(organizationCmd)
+	exportCmd.AddCommand(exportOrganizationCmd)
 
-	organizationCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
-	organizationCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
-	organizationCmd.Flags().BoolP(flag_all_gh_repos, flag_all_gh_repos_short, false, flag_all_gh_repos_description)
+	exportOrganizationCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
+	exportOrganizationCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
+	exportOrganizationCmd.Flags().BoolP(flag_all_gh_repos, flag_all_gh_repos_short, false, flag_all_gh_repos_description)
 
-	organizationCmd.MarkFlagRequired(flag_gh_token)
-	organizationCmd.MarkFlagRequired(flag_gh_orga)
+	exportOrganizationCmd.MarkFlagRequired(flag_gh_token)
+	exportOrganizationCmd.MarkFlagRequired(flag_gh_orga)
 }
