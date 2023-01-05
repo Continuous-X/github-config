@@ -8,7 +8,7 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
 	golang.org/x/exp v0.0.0-20221230185412-738e83a70c30
-	golang.org/x/oauth2 v0.3.0
+	golang.org/x/oauth2 v0.4.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/apimachinery v0.26.0
 )
@@ -30,9 +30,9 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	golang.org/x/crypto v0.4.0 // indirect
-	golang.org/x/net v0.4.0 // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/text v0.6.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
@@ -41,11 +41,11 @@ require (
 )
 
 exclude (
-	go.etcd.io/etcd/client/v2 v2.305.5
-	cloud.google.com/go/storage v1.14.0
-	cloud.google.com/go/storage v1.10.0
-	cloud.google.com/go/storage v1.6.0
-	cloud.google.com/go/storage v1.5.0
 	cloud.google.com/go/storage v1.0.0
+	cloud.google.com/go/storage v1.10.0
+	cloud.google.com/go/storage v1.14.0
+	cloud.google.com/go/storage v1.5.0
+	cloud.google.com/go/storage v1.6.0
 	github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4
+	go.etcd.io/etcd/client/v2 v2.305.5
 )
