@@ -24,12 +24,11 @@ jobs:
     - name: Build
       shell: bash
       run: |
-        pwd
-        ls -la
         chmod u+x build.sh
         ./build.sh
 
     - name: Test
       shell: bash
       run: |
+        chmod u+x test.sh
         ./test.sh
