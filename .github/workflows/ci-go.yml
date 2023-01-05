@@ -26,6 +26,7 @@ jobs:
       run: |
         pwd
         ls -la
+        chmod u+x build.sh
         ./build.sh
 
     - name: Test
