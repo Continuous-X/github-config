@@ -22,9 +22,13 @@ jobs:
         go-version: 1.19
 
     - name: Build
+      shell: bash
       run: |
+        pwd
+        ls -la
         ./build.sh
 
     - name: Test
+      shell: bash
       run: |
         ./test.sh
