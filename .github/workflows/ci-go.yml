@@ -21,11 +21,18 @@ jobs:
       with:
         go-version: 1.19
 
+    - name: Semantic Release
+      uses: cycjimmy/semantic-release-action@v3
+      id: get-new-version
+      with:
+        dry_run: true
+
     - name: Build
       shell: bash
       run: |
+        echo "new release version: ${{ steps.get-new-version.outputs.new_release_version }}"
         chmod u+x build.sh
-        ./build.sh
+        ./build.sh ${{ steps.get-new-version.outputs.new_release_version }}
 
     - name: Test
       shell: bash
