@@ -29,12 +29,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 19
       - name: Semantic Release
         id: get-next-version
         uses: cycjimmy/semantic-release-action@v3
         with:
           dry_run: true
-          semantic_version: 20.0.2
+          #semantic_version: 20.0.2
           # you can set branch for semantic-release older than v16.
           # branch: feat/workflow-build
           # You can specify specifying version range for the extra plugins if you prefer.
@@ -49,9 +52,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: test
         run: pwd && ls -la && set
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: 19
 #      - run: npx semantic-release -e semantic-release-monorepo --dry-run
 #        id: get-next-version
 #        env:
