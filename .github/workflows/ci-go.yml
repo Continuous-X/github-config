@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 19
-      - run: npx semantic-release --dry-run
+      - run: npx semantic-release -e semantic-release-monorepo --dry-run
         id: get-next-version
         env:
           GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GITHUB_TOKEN }}
