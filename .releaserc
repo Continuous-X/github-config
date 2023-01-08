@@ -1,21 +1,6 @@
 {
-    "repositoryUrl": "git@github.com:invenco/common.git",
     "branches": [
-      "master",
-      "next",
-      { "name": "feat/+(*)", "prerelease": true }
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      ["@semantic-release/exec", {
-        "verifyConditionsCmd": "yarn semantic-release:verify-conditions",
-        "prepareCmd": "yarn semantic-release:prepare ${nextRelease.version}",
-        "successCmd": "yarn semantic-release:success ${nextRelease.version}"
-      }],
-      ["@semantic-release/npm", {
-        "pkgRoot": "./lib/"
-      }],
-      "@semantic-release/git"
+      "main",
+      { "name": "feat/workflow-build", "prerelease": true }
     ]
   }

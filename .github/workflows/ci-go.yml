@@ -36,14 +36,14 @@ jobs:
           dry_run: true
           semantic_version: 20.0.2
           # you can set branch for semantic-release older than v16.
-          branch: feat/workflow-build
+          # branch: feat/workflow-build
           # You can specify specifying version range for the extra plugins if you prefer.
-          extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
-            @semantic-release/release-notes-generator
-            @semantic-release/commit-analyzer
-            @semantic-release/exec
+          #extra_plugins: |
+          #  @semantic-release/changelog
+          #  @semantic-release/git
+          #  @semantic-release/release-notes-generator
+          #  @semantic-release/commit-analyzer
+          #  @semantic-release/exec
         env:
           GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
