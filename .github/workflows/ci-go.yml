@@ -37,7 +37,7 @@ jobs:
         uses: cycjimmy/semantic-release-action@v3
         with:
           dry_run: true
-          semantic_version: 20.0.2
+          #semantic_version: 20.0.2
           # you can set branch for semantic-release older than v16.
           branch: ${{ env.GITHUB_HEAD_REF }}
           # You can specify specifying version range for the extra plugins if you prefer.
