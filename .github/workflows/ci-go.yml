@@ -5,9 +5,11 @@ name: "CI/CD for Go"
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "*"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
 #  get-next-version:
