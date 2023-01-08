@@ -16,48 +16,46 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Go environment
-      uses: actions/setup-go@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
       with:
-        go-version: 1.19
+        node-version: 19
+        registry-url: https://npm.pkg.github.com/
+        scope: "@swagger-api"
 
-    - name: Semantic Release
+    - name: Determine the next release version
       uses: cycjimmy/semantic-release-action@v3
       id: get-new-version
       with:
         dry_run: true
         extra_plugins: |
-          @semantic-release/changelog@6.0.0
           @semantic-release/git
-        branches: |
-          [
-            '+([0-9])?(.{+([0-9]),x}).x',
-            'main',
-            'next',
-            'next-major',
-            {
-              name: 'feat/workflow-build',
-              prerelease: true
-            },
-            {
-              name: 'beta',
-              prerelease: true
-            },
-            {
-              name: 'alpha',
-              prerelease: true
-            }
-          ]
+          @semantic-release/exec
       env:
         GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GITHUB_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Nothing to release
+      if: ${{ env.NEXT_RELEASE_VERSION == '' }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          core.setFailed('Nothing to release')
+
+    - name: Set up Go environment
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
 
     - name: Build
       shell: bash
+      env:
+        APP_VERSION: ${{ env.NEXT_RELEASE_VERSION }}
       run: |
-        echo "new release version: ${{ steps.get-new-version.outputs.new_release_version }}"
+        echo "new release version: ${{ env.APP_VERSION }}"
         chmod u+x build.sh
-        ./build.sh ${{ steps.get-new-version.outputs.new_release_version }}
+        ./build.sh ${{ env.APP_VERSION }}
 
     - name: Test
       shell: bash
