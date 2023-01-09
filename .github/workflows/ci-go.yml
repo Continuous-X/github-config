@@ -38,9 +38,7 @@ jobs:
           branches: |
             [
               '+([0-9])?(.{+([0-9]),x}).x',
-              'master',
-              'next',
-              'next-major',
+              'main',
               {
                 name: 'feat/workflow-build',
                 prerelease: true
