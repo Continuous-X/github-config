@@ -3,13 +3,7 @@
 
 name: "CI/CD for Go"
 
-on:
-  push:
-    branches:
-      - "*"
-  pull_request:
-    branches:
-      - main
+on: push
 
 jobs:
 #  get-next-version:
