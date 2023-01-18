@@ -14,7 +14,9 @@ jobs:
       - name: "get branch name"
         id: extract_branch_name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
+        run: |
+          branch_name=$(git rev-parse --abbrev-ref HEAD)
+          echo "::set-output name=branch::$(echo ${branch_name})"
       - name: "setup node"
         uses: actions/setup-node@v3
         with:
