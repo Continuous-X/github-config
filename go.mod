@@ -10,7 +10,7 @@ require (
 	golang.org/x/exp v0.0.0-20221230185412-738e83a70c30
 	golang.org/x/oauth2 v0.4.0
 	gopkg.in/yaml.v2 v2.4.0
-	k8s.io/apimachinery v0.27.0
+	k8s.io/apimachinery v0.27.2
 )
 
 require (
