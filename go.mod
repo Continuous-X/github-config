@@ -1,6 +1,6 @@
 module github-config
 
-go 1.19
+go 1.20
 
 require (
 	github.com/google/go-github/v48 v48.2.0
