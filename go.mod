@@ -1,12 +1,12 @@
 module github-config
 
-go 1.19
+go 1.20
 
 require (
 	github.com/google/go-github/v48 v48.2.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.16.0
+	github.com/spf13/cobra v1.7.0
 	golang.org/x/exp v0.0.0-20221230185412-738e83a70c30
 	golang.org/x/oauth2 v0.7.0
 	gopkg.in/yaml.v2 v2.4.0
