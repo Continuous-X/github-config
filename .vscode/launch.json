@@ -1,0 +1,56 @@
+{
+    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "github-config export orga",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "args": [
+                "export",
+                "-t",
+                "${env:GITHUB_OAUTH}",
+                "-o",
+                "Continuous-X",
+                "--config",
+                ".github-config.yaml"
+            ],
+            "env": {
+                "github.enterpriseDomain": "",
+                "export.github.enterpriseDomain": "",
+                "export.github.token": "${env:GITHUB_OAUTH}",
+                "export.github.organization": "Continuous-X",
+                "export.github.repository": "github-config-backup"
+            }
+        },
+        {
+            "name": "github-config export repo",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "args": [
+                "export",
+                "-t",
+                "${env:GITHUB_OAUTH}",
+                "-o",
+                "Continuous-X",
+                "-r",
+                "github-config",
+                "--config",
+                ".github-config.yaml"
+            ],
+            "env": {
+                "github.enterpriseDomain": "",
+                "export.github.enterpriseDomain": "",
+                "export.github.token": "${env:GITHUB_OAUTH}",
+                "export.github.organization": "Continuous-X",
+                "export.github.repository": "github-config-backup"
+            }
+        }
+    ]
+}

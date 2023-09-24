@@ -1,6 +1,6 @@
 module github-config
 
-go 1.20
+go 1.21
 
 require (
 	github.com/google/go-github/v48 v48.2.0
@@ -40,10 +40,10 @@ require (
 
 exclude (
 	cloud.google.com/go/storage v1.0.0
-	cloud.google.com/go/storage v1.10.0
-	cloud.google.com/go/storage v1.14.0
 	cloud.google.com/go/storage v1.5.0
 	cloud.google.com/go/storage v1.6.0
+	cloud.google.com/go/storage v1.10.0
+	cloud.google.com/go/storage v1.14.0
 	github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4
 	go.etcd.io/etcd/client/v2 v2.305.5
 )
