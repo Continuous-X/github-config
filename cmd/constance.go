@@ -19,9 +19,16 @@ const (
 	flag_dry_run_description      = "[default none] / Must be \"none\" or \"server\". If server strategy, only print the config informations that would be sent"
 
 	// commands
-	cmd_export       = "export"
-	cmd_diff         = "diff"
-	cmd_sync         = "sync"
-	cmd_organization = "organization"
-	cmd_repository   = "repository"
+	cmd_export = "export"
+	cmd_diff   = "diff"
+	cmd_sync   = "sync"
+
+	cmd_organization            = "organization"
+	cmd_organization_desc_short = "organization command with subcommands"
+	cmd_organization_desc_long  = `github organization command with subcommands.`
+
+	cmd_repository            = "repository"
+	cmd_repository_desc_short = "repository command with subcommands"
+	cmd_repository_desc_long  = `github repository command with subcommands.
+	`
 )

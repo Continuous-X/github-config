@@ -13,7 +13,7 @@ import (
 )
 
 var diffOrganizationCmd = &cobra.Command{
-	Use:   cmd_organization,
+	Use:   cmd_diff,
 	Short: "export the github organization config",
 	Long: `export the github organization configuration in the backup repository.
 
@@ -71,7 +71,7 @@ var diffOrganizationCmd = &cobra.Command{
 }
 
 func init() {
-	diffCmd.AddCommand(diffOrganizationCmd)
+	organizationCmd.AddCommand(diffOrganizationCmd)
 
 	diffOrganizationCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
 	diffOrganizationCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)

@@ -13,7 +13,7 @@ import (
 )
 
 var syncOrganizationCmd = &cobra.Command{
-	Use:   cmd_organization,
+	Use:   cmd_sync,
 	Short: "export the github organization config",
 	Long: `export the github organization configuration in the backup repository.
 
@@ -68,7 +68,7 @@ var syncOrganizationCmd = &cobra.Command{
 }
 
 func init() {
-	syncCmd.AddCommand(syncOrganizationCmd)
+	organizationCmd.AddCommand(syncOrganizationCmd)
 
 	syncOrganizationCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
 	syncOrganizationCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)

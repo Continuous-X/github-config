@@ -1,3 +1,18 @@
+/*
+Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package cmd
 
 import (
@@ -9,12 +24,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var repositoryCmd = &cobra.Command{
-	Use:   cmd_repository,
-	Short: "export the github repository config",
-	Long: `export the github repository configuration in the backup repository.
-
-	......`,
+// exportRepositoryCmd represents the export command
+var exportRepositoryCmd = &cobra.Command{
+	Use:   cmd_export,
+	Short: "export repository ",
+	Long:  `export repository data`,
 	Run: func(cmd *cobra.Command, args []string) {
 		slog.Debug("command started", "cmd", cmd.CommandPath())
 
@@ -67,18 +81,18 @@ var repositoryCmd = &cobra.Command{
 		}
 
 		slog.Debug("command ended", "cmd", cmd.CommandPath())
-
 	},
 }
 
 func init() {
-	exportCmd.AddCommand(repositoryCmd)
+	repositoryCmd.AddCommand(exportRepositoryCmd)
 
-	repositoryCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
-	repositoryCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
-	repositoryCmd.Flags().StringVarP(&gh_repository, flag_gh_repo, flag_gh_repo_short, "", flag_gh_repo_description)
+	exportRepositoryCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
+	exportRepositoryCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
+	exportRepositoryCmd.Flags().StringVarP(&gh_repository, flag_gh_repo, flag_gh_repo_short, "", flag_gh_repo_description)
 
-	repositoryCmd.MarkFlagRequired(flag_gh_token)
-	repositoryCmd.MarkFlagRequired(flag_gh_orga)
-	repositoryCmd.MarkFlagRequired(flag_gh_repo)
+	exportRepositoryCmd.MarkFlagRequired(flag_gh_token)
+	exportRepositoryCmd.MarkFlagRequired(flag_gh_orga)
+	exportRepositoryCmd.MarkFlagRequired(flag_gh_repo)
+
 }

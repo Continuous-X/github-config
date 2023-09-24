@@ -1,3 +1,18 @@
+/*
+Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package cmd
 
 import (
@@ -10,11 +25,9 @@ import (
 )
 
 var exportOrganizationCmd = &cobra.Command{
-	Use:   cmd_organization,
-	Short: "export the github organization config",
-	Long: `export the github organization configuration in the backup repository.
-
-	......`,
+	Use:   cmd_export,
+	Short: "export organization ",
+	Long:  `export organization data`,
 	Run: func(cmd *cobra.Command, args []string) {
 		slog.Debug("command started", "cmd", cmd.CommandPath())
 
@@ -102,12 +115,11 @@ var exportOrganizationCmd = &cobra.Command{
 		}
 
 		slog.Debug("command ended", "cmd", cmd.CommandPath())
-
 	},
 }
 
 func init() {
-	exportCmd.AddCommand(exportOrganizationCmd)
+	organizationCmd.AddCommand(exportOrganizationCmd)
 
 	exportOrganizationCmd.Flags().StringVarP(&gh_personal_token, flag_gh_token, flag_gh_token_short, "", flag_gh_token_description)
 	exportOrganizationCmd.Flags().StringVarP(&gh_organization, flag_gh_orga, flag_gh_orga_short, "", flag_gh_orga_description)
