@@ -5,6 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "github-config organization sync",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "args": [
+                "organization",
+                "sync",
+                "-t",
+                "${env:GITHUB_OAUTH}",
+                "-o",
+                "Continuous-X",
+                "--config",
+                ".github-config.yaml"
+            ],
+            "env": {
+                "github.enterpriseDomain": "",
+                "export.github.enterpriseDomain": "",
+                "export.github.token": "${env:GITHUB_OAUTH}",
+                "export.github.organization": "Continuous-X",
+                "export.github.repository": "github-config-backup"
+            }
+        },
+        {
             "name": "github-config organization export",
             "type": "go",
             "request": "launch",
@@ -17,6 +41,32 @@
                 "${env:GITHUB_OAUTH}",
                 "-o",
                 "Continuous-X",
+                "--config",
+                ".github-config.yaml"
+            ],
+            "env": {
+                "github.enterpriseDomain": "",
+                "export.github.enterpriseDomain": "",
+                "export.github.token": "${env:GITHUB_OAUTH}",
+                "export.github.organization": "Continuous-X",
+                "export.github.repository": "github-config-backup"
+            }
+        },
+        {
+            "name": "github-config repository sync",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "args": [
+                "repository",
+                "sync",
+                "-t",
+                "${env:GITHUB_OAUTH}",
+                "-o",
+                "Continuous-X",
+                "-r",
+                "protected-repo",
                 "--config",
                 ".github-config.yaml"
             ],
@@ -42,7 +92,7 @@
                 "-o",
                 "Continuous-X",
                 "-r",
-                "github-config",
+                "protected-repo",
                 "--config",
                 ".github-config.yaml"
             ],

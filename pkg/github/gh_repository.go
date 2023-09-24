@@ -1,6 +1,9 @@
 package github
 
 import (
+	"encoding/json"
+
+	"github.com/google/go-github/v48/github"
 	"gopkg.in/yaml.v2"
 )
 
@@ -33,6 +36,29 @@ func (ghRepo GHRepository) GetConfig() (string, error) {
 	}
 
 	return string(profileMarshal), nil
+}
+
+func (ghRepo GHRepository) WriteConfigProfile(config GHRepositoryProfile) error {
+
+	marshal, marshalErr := json.Marshal(config)
+	if marshalErr != nil {
+		return marshalErr
+	}
+
+	newProfile := &github.Repository{}
+	json.Unmarshal(marshal, newProfile)
+
+	client, ctx := GHBase{
+		ghToken:   ghRepo.Organisation.GhToken,
+		gheDomain: ghRepo.Organisation.GhEnterpriseDomain,
+	}.getCient()
+
+	_, _, editErr := client.Repositories.Edit(ctx, ghRepo.Organisation.Organisation, ghRepo.Repository, newProfile)
+	if editErr != nil {
+		return editErr
+	}
+
+	return nil
 }
 
 type GHRepositorySettings struct {

@@ -14,9 +14,8 @@ import (
 
 var syncOrganizationCmd = &cobra.Command{
 	Use:   cmd_sync,
-	Short: "export the github organization config",
-	Long: `export the github organization configuration in the backup repository.
-
+	Short: "sync the github organization config",
+	Long: `sync the github organization configuration in the backup repository.
 	......`,
 	Run: func(cmd *cobra.Command, args []string) {
 		slog.Debug("command started", "cmd", cmd.CommandPath())
