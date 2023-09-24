@@ -5,12 +5,12 @@ go 1.20
 require (
 	github.com/google/go-github/v48 v48.2.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/spf13/viper v1.16.0
 	github.com/spf13/cobra v1.7.0
+	github.com/spf13/viper v1.16.0
 	golang.org/x/exp v0.0.0-20221230185412-738e83a70c30
 	golang.org/x/oauth2 v0.10.0
 	gopkg.in/yaml.v2 v2.4.0
-	k8s.io/apimachinery v0.27.3
+	k8s.io/apimachinery v0.28.2
 )
 
 require (
@@ -28,7 +28,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
-	golang.org/x/net v0.12.0 // indirect
+	golang.org/x/net v0.13.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
