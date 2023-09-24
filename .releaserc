@@ -1,0 +1,6 @@
+{
+    "branches": [
+      "main",
+      { "name": "feat/workflow-build", "prerelease": true }
+    ]
+  }

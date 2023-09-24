@@ -4,3 +4,12 @@ updates:
     directory: /
     schedule:
       interval: daily
+    open-pull-requests-limit: 99
+    target-branch: main
+    commit-message:
+      prefix: "fix prod"
+      prefix-development: "fix dev"
+      include: scope
+    labels:
+      - "go"
+      - "dependencies"
